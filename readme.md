@@ -1,5 +1,5 @@
 # AppDummy v1 — G-APPDUMMY-V1
-Sergio Jávega Porcel · [Tu NIA]
+Sergio Jávega Porcel · 10086949
 
 ## Qué hace
 (Pendiente de redactar)
