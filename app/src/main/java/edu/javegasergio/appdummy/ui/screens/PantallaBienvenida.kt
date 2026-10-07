@@ -1,7 +1,9 @@
 package edu.javegasergio.appdummy.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.*
@@ -19,6 +21,9 @@ fun PantallaBienvenida(onEntrar: () -> Unit) {
     var nombreUsuario by rememberSaveable { mutableStateOf("") }
     //R2-> Validación nombre y habilitar botón
     val botonHabilitado = nombreUsuario.trim().length >= 3
+    //1a decisión: Cuando se gira el dispositivo es imposible interaccionar con el botón
+    //Con un scroll ahora es posible interaccionar.
+    val scrollState= rememberScrollState()
 
     //R4 -> Scaffold + topAppBar
     Scaffold(
@@ -32,7 +37,8 @@ fun PantallaBienvenida(onEntrar: () -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)  // paddingValues debe aplicarse al contenido principal SIEMPRE
-            .padding(32.dp),
+            .padding(32.dp)
+            .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
