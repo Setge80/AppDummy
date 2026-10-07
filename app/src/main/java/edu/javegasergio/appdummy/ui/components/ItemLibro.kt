@@ -50,7 +50,7 @@ fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (I
                 )
             else // Si no es una URL válida, se muestra una imagen por defecto
                 AsyncImage(
-                    model = libro.cover,
+                    model = R.drawable.nocover,
                     contentDescription = "Portada de ${libro.titulo}",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.width(200.dp)
