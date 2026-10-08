@@ -1,6 +1,7 @@
 package edu.javegasergio.appdummy.ui.screens
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
 
 // ─── screens/PantallaGestionPermisos.kt ──────────────────────────────────────────────────────────
 
@@ -33,7 +35,7 @@ sealed class EstadoPermiso {
 fun PantallaGestionPermisos() {
     val context = LocalContext.current
 
-    // Comprobación inicial del estado del permiso de cámara
+    //R14=> Comprobación inicial del estado del permiso de cámara
     var estadoPermiso by remember {
         val concedido = ContextCompat.checkSelfPermission(
             context, Manifest.permission.CAMERA
@@ -46,7 +48,15 @@ fun PantallaGestionPermisos() {
     val solicitarPermiso = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { concedido ->
-        estadoPermiso = if (concedido) EstadoPermiso.Concedido else EstadoPermiso.Denegado
+        val activity = context as? Activity
+        val volverAPreguntar = activity?.let {
+            ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.CAMERA)
+        } ?: false
+        estadoPermiso = when {
+            concedido -> EstadoPermiso.Concedido
+            volverAPreguntar -> EstadoPermiso.Denegado
+            else -> EstadoPermiso.DenegadoPermanentemente
+        }
     }
 
     Scaffold(
@@ -85,7 +95,7 @@ fun PantallaGestionPermisos() {
             Text(descripcion, style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(32.dp))
 
-            // Acción según estado
+            // Acción e Interfaz según estado
             when (estadoPermiso) {
                 EstadoPermiso.Concedido -> Text("✓ Puedes usar la cámara en AppDummy")
                 EstadoPermiso.Pendiente -> {
@@ -93,11 +103,17 @@ fun PantallaGestionPermisos() {
                         onClick = { solicitarPermiso.launch(Manifest.permission.CAMERA) },
                         modifier = Modifier.fillMaxWidth()
                     ) { Text("Conceder permiso de cámara") }
+                }//R13-> Se añade interfaz y accion independiente para estado denegado,
+                //pidiendo de nuevo permisos DESDE la aplicación
+                EstadoPermiso.Denegado -> {
+                    Button(
+                        onClick = { solicitarPermiso.launch(Manifest.permission.CAMERA) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("Reintentar solicitud") }
                 }
-                EstadoPermiso.Denegado,
                 EstadoPermiso.DenegadoPermanentemente -> {
                     OutlinedButton(
-                        onClick = {
+                        onClick = {//R15=>Abrir ajustes con intent implicito
                             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                                 data = Uri.fromParts("package", context.packageName, null)
                             }
@@ -109,12 +125,11 @@ fun PantallaGestionPermisos() {
             }
         }
     }
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun PantallaPermsisosPreview() {
+fun PantallaPermisosPreview() {
     MaterialTheme {
         PantallaGestionPermisos()
     }

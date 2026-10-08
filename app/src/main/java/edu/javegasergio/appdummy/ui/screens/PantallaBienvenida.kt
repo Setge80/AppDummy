@@ -96,7 +96,7 @@ fun PantallaBienvenida(onEntrar: () -> Unit) {
     }
 }
 
-
+//R17=>Preview Bienvenida
 @Preview(showBackground = true)
 @Composable
 fun PantallaBienvenidaPreview() {

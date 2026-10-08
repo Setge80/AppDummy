@@ -1,5 +1,6 @@
 package edu.javegasergio.appdummy.ui.screens
 
+import android.content.Intent
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -13,6 +14,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.javegasergio.appdummy.ui.components.ItemLibro
@@ -27,6 +29,8 @@ fun PantallaListado() {
     var busqueda by remember { mutableStateOf("") }
     var autorSeleccionado by remember { mutableStateOf("Todos") }
     var libros by remember { mutableStateOf(librosTest) }
+    //R16=> Necesario para compartir
+    val context= LocalContext.current
 
     val autores = listOf("Todos") + libros.map { it.autor }.distinct().sorted()
 
@@ -127,15 +131,23 @@ fun PantallaListado() {
                                 libros = libros.map {
                                     if (it.id == id) it.copy(esFavorito = !it.esFavorito) else it
                                 }
+                            }, //R16=>Botón Compartir titulo y autor
+                            onToggleCompartir={
+                                val intent= Intent(Intent.ACTION_SEND).apply{
+                                    type="text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, "Título: ${libro.titulo}," +
+                                            " autor : "+ libro.autor)
+                                    }
+                                    context.startActivity(Intent.createChooser(intent, "Compartir con"))
+                                })
                             }
-                        )
                     }
                 }
             }
         }
     }
-}
 
+//R17=>Preview Listado
 @Preview(showBackground = true)
 @Composable
 fun PantallaListadoPreview() {

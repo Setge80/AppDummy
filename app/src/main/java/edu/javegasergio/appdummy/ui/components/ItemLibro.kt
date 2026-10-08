@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.BookmarkAdded
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,15 +23,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import edu.javegasergio.appdummy.model.LibroUI
 import edu.javegasergio.appdummy.R
+import edu.javegasergio.appdummy.model.librosTest
+import edu.javegasergio.appdummy.ui.screens.PantallaGestionPermisos
 
 @Composable
-fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (Int) -> Unit) {
+fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (Int) -> Unit,
+              onToggleCompartir:(LibroUI)->Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
@@ -66,9 +71,7 @@ fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (I
                 horizontalArrangement = Arrangement.Center
             ) {
                 IconButton(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.5f),
+                    modifier = Modifier.weight(0.33f),
                     onClick = { onToggleLeido(libro.id) }) {
                     Icon(
                         imageVector = if (libro.leido) Icons.Default.BookmarkAdded
@@ -79,9 +82,7 @@ fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (I
                     )
                 }
                 IconButton(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(0.5f),
+                    modifier = Modifier.weight(0.33f),
                     onClick = { onToggleFavorito(libro.id) }) {
                     Icon(
                         imageVector = if (libro.esFavorito) Icons.Default.Favorite
@@ -91,7 +92,24 @@ fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (I
                         else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+                IconButton(
+                    modifier = Modifier.weight(0.33f),
+                    onClick = {onToggleCompartir(libro)}){
+                    Icon(
+                        imageVector=Icons.Default.Share,
+                        contentDescription = "Compartir titulo y autor"
+                    )
+                    }
+                }
             }
         }
+    }
+
+//R17=>Preview ItemLibro
+@Composable
+@Preview
+fun ItemLibroPreview() {
+    MaterialTheme {
+        ItemLibro(librosTest[1],{},{},{})
     }
 }
