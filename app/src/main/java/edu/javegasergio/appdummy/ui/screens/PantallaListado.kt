@@ -24,7 +24,7 @@ import edu.javegasergio.appdummy.model.librosTest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaListado() {
+fun PantallaListado(modifier:Modifier = Modifier) {
     // Estado local de la pantalla (en B2 pasará al ViewModel)
     var busqueda by remember { mutableStateOf("") }
     var autorSeleccionado by remember { mutableStateOf("Todos") }
@@ -44,6 +44,7 @@ fun PantallaListado() {
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text("AppDummy") },

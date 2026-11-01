@@ -34,9 +34,9 @@ import edu.javegasergio.appdummy.model.librosTest
 import edu.javegasergio.appdummy.ui.screens.PantallaGestionPermisos
 
 @Composable
-fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (Int) -> Unit,
+fun ItemLibro(libro: LibroUI, modifier: Modifier= Modifier, onToggleLeido: (Int) -> Unit, onToggleFavorito: (Int) -> Unit,
               onToggleCompartir:(LibroUI)->Unit) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+    Card(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,6 +110,6 @@ fun ItemLibro(libro: LibroUI, onToggleLeido: (Int) -> Unit, onToggleFavorito: (I
 @Preview
 fun ItemLibroPreview() {
     MaterialTheme {
-        ItemLibro(librosTest[1],{},{},{})
+        ItemLibro(librosTest[1], Modifier,{},{}, onToggleCompartir ={})
     }
 }

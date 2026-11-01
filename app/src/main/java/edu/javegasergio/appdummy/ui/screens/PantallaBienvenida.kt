@@ -14,9 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import edu.javegasergio.appdummy.ui.theme.AppDummyTheme
+
 @OptIn(ExperimentalMaterial3Api::class) //El compilador exige esta línea
 @Composable
-fun PantallaBienvenida(onEntrar: () -> Unit) {
+fun PantallaBienvenida(onEntrar: () -> Unit, modifier: Modifier = Modifier) {
     //R3 -> El nombre se conserva al rotar el dispositivo
     var nombreUsuario by rememberSaveable { mutableStateOf("") }
     //R2-> Validación nombre y habilitar botón
@@ -27,6 +29,7 @@ fun PantallaBienvenida(onEntrar: () -> Unit) {
 
     //R4 -> Scaffold + topAppBar
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = { Text("AppDummy") }
@@ -101,6 +104,14 @@ fun PantallaBienvenida(onEntrar: () -> Unit) {
 @Composable
 fun PantallaBienvenidaPreview() {
     MaterialTheme {
+        PantallaBienvenida(onEntrar = { })
+    }
+}
+
+@Preview(showBackground = true, name = "Modo Oscuro")
+@Composable
+fun PantallaBienvenidaPreviewOscuro() {
+    AppDummyTheme(darkTheme = true) {
         PantallaBienvenida(onEntrar = { })
     }
 }

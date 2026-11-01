@@ -32,7 +32,7 @@ sealed class EstadoPermiso {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaGestionPermisos() {
+fun PantallaGestionPermisos(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     //R14=> Comprobación inicial del estado del permiso de cámara
@@ -60,6 +60,7 @@ fun PantallaGestionPermisos() {
     }
 
     Scaffold(
+        modifier = modifier,
         topBar = { TopAppBar(title = { Text("Permisos de AppDummy") }) }
     ) { padding ->
         Column(
