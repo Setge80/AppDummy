@@ -1,4 +1,4 @@
-package edu.javegasergio.appdummy.ui.screens
+package edu.javegasergio.appdummy.screens.listado
 
 import android.content.Intent
 import androidx.compose.animation.*
@@ -18,7 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.javegasergio.appdummy.ui.components.ItemLibro
-import edu.javegasergio.appdummy.model.librosTest
+import edu.javegasergio.appdummy.data.model.librosTest
 
 // ─── screens/PantallaListado.kt ───────────────────────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-package edu.javegasergio.appdummy.ui.screens
+package edu.javegasergio.appdummy.screens.bienvenida
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState

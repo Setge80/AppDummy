@@ -1,8 +1,9 @@
-package edu.javegasergio.appdummy.ui.screens
+package edu.javegasergio.appdummy.screens.permisos
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.layout.*
@@ -39,7 +40,7 @@ fun PantallaGestionPermisos(modifier: Modifier = Modifier) {
     var estadoPermiso by remember {
         val concedido = ContextCompat.checkSelfPermission(
             context, Manifest.permission.CAMERA
-        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
 
         mutableStateOf(if (concedido) EstadoPermiso.Concedido else EstadoPermiso.Pendiente)
     }

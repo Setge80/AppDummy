@@ -4,7 +4,6 @@ import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -28,10 +27,9 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import edu.javegasergio.appdummy.model.LibroUI
+import edu.javegasergio.appdummy.data.model.LibroUI
 import edu.javegasergio.appdummy.R
-import edu.javegasergio.appdummy.model.librosTest
-import edu.javegasergio.appdummy.ui.screens.PantallaGestionPermisos
+import edu.javegasergio.appdummy.data.model.librosTest
 
 @Composable
 fun ItemLibro(libro: LibroUI, modifier: Modifier= Modifier, onToggleLeido: (Int) -> Unit, onToggleFavorito: (Int) -> Unit,
