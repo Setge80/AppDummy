@@ -5,12 +5,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import edu.javegasergio.appdummy.data.model.Libro
 import edu.javegasergio.appdummy.data.repository.LibrosRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+
+//R8 (DPG2)->
+sealed class LibrosEvento {
+    data class MostrarSnackbar(val mensaje: String) : LibrosEvento()
+    data class NavegarADetalle(val id: Int) : LibrosEvento()
+}
 
 class LibrosViewModel(
     private val repository: LibrosRepository
@@ -31,6 +41,12 @@ class LibrosViewModel(
 
     private val _autorSeleccionado = MutableStateFlow("Todos")
     val autorSeleccionado: StateFlow<String> = _autorSeleccionado.asStateFlow()
+
+    private val _eventos = MutableSharedFlow<LibrosEvento>(
+        replay = 0,
+        extraBufferCapacity = 1
+    )
+    val eventos: SharedFlow<LibrosEvento> = _eventos.asSharedFlow()
 
     init {
         // Se ejecuta al crear el ViewModel — carga los datos automáticamente
@@ -70,31 +86,40 @@ class LibrosViewModel(
         _busqueda.value = texto
     }
 
-    fun toggleFavorito(id: Int) {
-        // update{} es atómico y thread-safe: lee el estado actual y produce el nuevo
-        // en una sola operación, sin condiciones, evitando problemas de concurrencia.
+    //R7 (DPG2)-> **Se gestiona desde el VM
+    fun toggleFavorito(libro: Libro) {
         _uiState.update { estado ->
             if (estado is LibrosUiState.Exito) {
-                estado.copy(
-                    libros = estado.libros.map { libro ->
-                        if (libro.id == id) libro.copy(esFavorito = !libro.esFavorito)
-                        else libro
-                    }
-                )
+                estado.copy(libros = estado.libros.map {
+                    if (it.id == libro.id) it.copy(esFavorito = !it.esFavorito) else it
+                })
             } else estado
+        }
+        viewModelScope.launch {
+            _eventos.emit(
+                LibrosEvento.MostrarSnackbar(
+                    if (libro.esFavorito) "\"${libro.titulo}\" eliminado de favoritos"
+                    else "\"${libro.titulo}\" añadido a favoritos"
+                )
+            )
         }
     }
 
-    fun toggleLeido(id: Int) {
+    fun toggleLeido(libro: Libro) {
         _uiState.update { estado ->
             if (estado is LibrosUiState.Exito) {
-                estado.copy(
-                    libros = estado.libros.map { libro ->
-                        if (libro.id == id) libro.copy(leido = !libro.leido)
-                        else libro
-                    }
-                )
+                estado.copy(libros = estado.libros.map {
+                    if (it.id == libro.id) it.copy(leido = !it.leido) else it
+                })
             } else estado
+        }
+        viewModelScope.launch {
+            _eventos.emit(
+                LibrosEvento.MostrarSnackbar(
+                    if (libro.leido) "\"${libro.titulo}\" marcado como no leído"
+                    else "\"${libro.titulo}\" marcado como leído"
+                )
+            )
         }
     }
 
