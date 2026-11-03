@@ -40,6 +40,7 @@ fun AppDummyBottomBar(navController: NavController) {
                 NavigationBarItem(
                     selected = seleccionado,
                     onClick = {
+                        //R16 (DPG2) -> Al volver al listado, se conserva la posición del scroll
                         navController.navigate(item.ruta) {
                             // popUpTo: vuelve al inicio antes de navegar
                             // evita acumular destinos en la pila al cambiar de pestaña
