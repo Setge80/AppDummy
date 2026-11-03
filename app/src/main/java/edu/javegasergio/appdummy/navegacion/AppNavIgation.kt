@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import edu.javegasergio.appdummy.screens.detalle.PantallaDetalle
+import edu.javegasergio.appdummy.screens.favoritos.PantallaFavoritos
 
 //R14 (DPG2) -> AppNavigation contiene el grafo de navegación con
 // todos los posibles nodos (Inicio, Listado...) y gestiona el historial de navegación
@@ -43,6 +44,14 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
                 PantallaListado(    // <- Composable de la pantalla listado.
                     onNavegaADetalle = { id ->
                         navController.navigate(Detalle(id = id))    // <- Ruta de Navegación a la pantalla detalle con el id del libro.
+                    }
+                )
+            }
+            composable<Favoritos> {
+                PantallaFavoritos(
+                    onVolver = { navController.navigateUp() },
+                    onNavegaADetalle = { id ->
+                        navController.navigate(Detalle(id = id))
                     }
                 )
             }

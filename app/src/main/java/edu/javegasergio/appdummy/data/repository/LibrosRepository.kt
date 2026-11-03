@@ -8,7 +8,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class LibrosRepository {
 
-    private val libros = listOf(
+    private var libros = listOf(
         Libro(
             1,
             "Proyecto Hail Mary",
@@ -29,6 +29,26 @@ class LibrosRepository {
     suspend fun getLibros(): List<Libro> {
         kotlinx.coroutines.delay(800.milliseconds)   // simula latencia de red
         return libros
+    }
+
+    suspend fun toggleFavorito(libro: Libro): List<Libro>{
+        kotlinx.coroutines.delay(100.milliseconds)
+        val idBuscado = libro.id
+        val listaActualizada : List<Libro> = libros.map { libro ->
+            if (libro.id==idBuscado){
+                libro.copy(esFavorito = !libro.esFavorito)
+            } else
+            {
+                libro
+            }
+        }
+        libros=listaActualizada
+        return libros
+    }
+
+    suspend fun getLibrosFavoritos(): List<Libro>{
+        kotlinx.coroutines.delay(500.milliseconds)
+        return libros.filter { libro -> libro.esFavorito==true }
     }
 
     suspend fun getAutores(): List<String> {

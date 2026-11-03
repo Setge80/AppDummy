@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 //R17(DPG2) -> VM de detalle con sus propios estados (en DetalleUiState), que ademas obtiene el id
-// del libro a traves de un SavedStateHandle
+// del libro a traves de un SavedStateHandle (Asi la pantalla no depende de la id)
 class DetalleViewModel(
     savedStateHandle: SavedStateHandle,
     private val repository: LibrosRepository
