@@ -1,5 +1,6 @@
 package edu.javegasergio.appdummy.screens.listado
 
+import android.R.attr.navigationIcon
 import android.content.Intent
 import android.util.Patterns
 import androidx.compose.animation.*
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,6 +30,7 @@ import edu.javegasergio.appdummy.R
 import edu.javegasergio.appdummy.data.model.Libro
 import edu.javegasergio.appdummy.ui.components.ItemLibro
 import edu.javegasergio.appdummy.data.model.librosTest
+import edu.javegasergio.appdummy.screens.permisos.PantallaGestionPermisos
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -38,7 +41,9 @@ import kotlinx.coroutines.launch
 fun PantallaListado(
     modifier: Modifier = Modifier,
     viewModel: LibrosViewModel = viewModel(factory = LibrosViewModel.Factory),
-    onNavegaADetalle: (Int) -> Unit = {}  // callback de navegación (se conecta al NavHost en T3)
+    onNavegaADetalle: (Int) -> Unit = {},  // callback de navegación (se conecta al NavHost en T3)
+    onNavegaAPermisos: () -> Unit = {},
+    onVolver: () -> Unit
 ) {
     // collectAsStateWithLifecycle: activo en foreground, pausado en background
     //R6 y R7 (DPG2) -> Recoge el estado y sobrevive a la rotación (por el VM** tambien).
@@ -80,6 +85,14 @@ fun PantallaListado(
                     IconButton(onClick = { }) {
                         Icon(Icons.Default.AccountCircle, contentDescription = "Perfil")
                     }
+                    IconButton(onClick = onNavegaAPermisos) {
+                        Icon(Icons.Default.CameraAlt, contentDescription = "Permisos Cámara")
+                    }
+                },
+                navigationIcon = { // 👈 Añadimos el icono para volver
+                        IconButton(onClick = onVolver) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
+                        }
                 }
             )
         }
@@ -268,5 +281,5 @@ fun ItemLibro(
 @Preview(showBackground = true)
 @Composable
 fun PantallaListadoPreview() {
-    PantallaListado()
+    PantallaListado(onVolver = {})
 }

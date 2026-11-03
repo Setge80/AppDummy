@@ -53,6 +53,14 @@ class FavoritosViewModel(
             repository.toggleFavorito(libro)
             cargarFavoritos()
         }
+        viewModelScope.launch {
+            _eventos.emit(
+                LibrosEvento.MostrarSnackbar(
+                    if (libro.esFavorito) "\"${libro.titulo}\" eliminado de favoritos"
+                    else "\"${libro.titulo}\" añadido a favoritos"
+                )
+            )
+        }
     }
 
     fun toggleLeido(libro: Libro) {
