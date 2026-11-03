@@ -18,7 +18,7 @@ import androidx.navigation.toRoute
 fun AppNavigation(navController: NavHostController = rememberNavController()) {
     Scaffold(
         bottomBar = {
-            //AppDummyBottomBar(navController = navController)
+            AppDummyBottomBar(navController = navController)
         }
     ) { innerPadding ->
         NavHost(
