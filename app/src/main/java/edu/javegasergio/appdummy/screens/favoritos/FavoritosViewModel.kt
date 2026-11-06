@@ -29,6 +29,17 @@ class FavoritosViewModel(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<FavoritosUiState>(FavoritosUiState.Cargando)
     val uiState: StateFlow<FavoritosUiState> = _uiState.asStateFlow()
+
+    private val _busqueda = MutableStateFlow("")
+    val busqueda: StateFlow<String> = _busqueda.asStateFlow()
+
+    // Lista de autores para los chips de filtro
+    private val _autores = MutableStateFlow(listOf("Todos"))
+    val autores: StateFlow<List<String>> = _autores.asStateFlow()
+
+    private val _autorSeleccionado = MutableStateFlow("Todos")
+    val autorSeleccionado: StateFlow<String> = _autorSeleccionado.asStateFlow()
+
     private val _eventos = MutableSharedFlow<LibrosEvento>(
         replay = 0,
         extraBufferCapacity = 1
@@ -38,6 +49,7 @@ class FavoritosViewModel(
 
     init {
         cargarFavoritos()
+        cargarAutores()
     }
 
     fun cargarFavoritos() {
@@ -46,6 +58,25 @@ class FavoritosViewModel(
             _uiState.value = if (librosFavs.isNotEmpty()) FavoritosUiState.Exito(librosFavs)
             else FavoritosUiState.Vacio
         }
+    }
+
+    fun cargarAutores() {
+        viewModelScope.launch {
+            try {
+                val autores = repository.getAutores()
+                _autores.value = listOf("Todos") + autores
+            } catch (e: Exception) {
+                _uiState.value = FavoritosUiState.Vacio
+            }
+        }
+    }
+
+    fun actualizarBusqueda(texto: String) {
+        _busqueda.value = texto
+    }
+
+    fun actualizarAutorSeleccionado(autor: String) {
+        _autorSeleccionado.value = autor
     }
 
     fun toggleFavorito(libro: Libro) {

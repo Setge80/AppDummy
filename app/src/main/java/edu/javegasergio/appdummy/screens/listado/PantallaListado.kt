@@ -89,7 +89,7 @@ fun PantallaListado(
                         Icon(Icons.Default.CameraAlt, contentDescription = "Permisos Cámara")
                     }
                 },
-                navigationIcon = { // 👈 Añadimos el icono para volver
+                navigationIcon = {
                         IconButton(onClick = onVolver) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                         }
